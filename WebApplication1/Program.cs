@@ -1,5 +1,4 @@
 
-using WebApplication1.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,9 +21,6 @@ builder.Services
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-//to register a service which provide an object for the implementation of ilogging
-builder.Services.AddSingleton<ILogging, LoggingV2>();
-   // by using singleton, one logger will be used through up the application
 
 var app = builder.Build();
 

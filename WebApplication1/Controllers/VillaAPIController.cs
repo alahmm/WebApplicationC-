@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Data;
-using WebApplication1.Logging;
-using WebApplication1.Models;
 using WebApplication1.Models.Dto;
 
 namespace WebApplication1.Controllers
@@ -11,22 +9,13 @@ namespace WebApplication1.Controllers
     [ApiController]//activate the validation
     public class VillaAPIController : ControllerBase
     {
-        //private readonly ILogger<VillaAPIController> _logger;
+        public VillaAPIController() {
 
-        //public VillaAPIController(ILogger<VillaAPIController> logger)//write ctor + tab twice.    strg + . to have more options about parameter
-        //{
-        //    _logger = logger; //here the standard logger will be used
-        //}
-        private readonly ILogging _logger;
-        public VillaAPIController(ILogging logger) {
-
-            _logger = logger;
         }
 
         [HttpGet]
         public ActionResult<IEnumerable<VillaDTO>> GetVillas()
         {
-            _logger.Log("getting all villas", "");
             return Ok(VillaStore.villas);
         }
 
@@ -39,7 +28,6 @@ namespace WebApplication1.Controllers
         {
             if (id == 0)
             {
-                _logger.Log("id error with id " + id, "error");
                 return BadRequest();
             }
             var villa = VillaStore.villas.FirstOrDefault(u => u.Id == id);
