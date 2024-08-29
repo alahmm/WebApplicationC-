@@ -5,6 +5,10 @@ using WebApplication1.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services
+    .AddControllersWithViews()
+    .AddNewtonsoftJson();
+
 // Add services to the container.
 builder.Services.AddDbContext<ApplicationDbContext>(option =>
 {
