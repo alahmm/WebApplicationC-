@@ -7,12 +7,12 @@ namespace Magi
     public class MappingConfig : Profile
     {
         public MappingConfig() { 
-            CreateMap<Villa, VillaDTO> ();
-            CreateMap<VillaDTO, Villa> ();
+            CreateMap<T, VillaDTO> ();
+            CreateMap<VillaDTO, T> ();
 
-            CreateMap<Villa, VillaDTOCreate> ().ReverseMap();
+            CreateMap<T, VillaDTOCreate> ().ReverseMap();
 
-            CreateMap<Villa, VillaDTOUpdate>().ReverseMap();
+            CreateMap<T, VillaDTOUpdate>().ReverseMap();
         }
     }
 }

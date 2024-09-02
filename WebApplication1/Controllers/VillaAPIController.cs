@@ -23,7 +23,7 @@ namespace WebApplication1.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<VillaDTO>>> GetVillas()
         {
-            IEnumerable<Villa> villas = await _villaRepository.GetAll();
+            IEnumerable<T> villas = await _villaRepository.GetAll();
             return Ok(_mapper.Map<List<VillaDTO>>(villas));//the distenation type is between <>
         }
 
@@ -67,7 +67,7 @@ namespace WebApplication1.Controllers
             }
             //we need to convert villaDto to villa
             
-            Villa model = _mapper.Map<Villa>(createDTO);
+            T model = _mapper.Map<T>(createDTO);
         
             await _villaRepository.Create(model);
 
@@ -106,7 +106,7 @@ namespace WebApplication1.Controllers
                 return BadRequest();
             }
 
-            Villa model = _mapper.Map<Villa>(updateDTO);
+            T model = _mapper.Map<T>(updateDTO);
 
             await _villaRepository.Update(model);
             return NoContent();
@@ -135,7 +135,7 @@ namespace WebApplication1.Controllers
             }
             patchDTO.ApplyTo(villaDTOUpdate, ModelState);
 
-            Villa model = _mapper.Map <Villa> (villaDTOUpdate);
+            T model = _mapper.Map <T> (villaDTOUpdate);
             await _villaRepository.Update(model);
 
             if (!ModelState.IsValid)
