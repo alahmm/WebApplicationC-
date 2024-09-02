@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
+using Magi.Models;
 using Magi.Repository.IRepository;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 using WebApplication1.Data;
 using WebApplication1.Models;
 using WebApplication1.Models.Dto;
@@ -13,18 +15,22 @@ namespace WebApplication1.Controllers
     [ApiController]//activate the validation
     public class VillaAPIController : ControllerBase
     {
+        protected APIResponse _response;
         private readonly IVillaRepository _villaRepository;
         private readonly IMapper _mapper;
         public VillaAPIController(IVillaRepository villaReposirory, IMapper mapper) {
             _villaRepository = villaReposirory;
             _mapper = mapper;
+            this._response = new ();
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<VillaDTO>>> GetVillas()
+        public async Task<ActionResult<APIResponse>> GetVillas()
         {
-            IEnumerable<T> villas = await _villaRepository.GetAll();
-            return Ok(_mapper.Map<List<VillaDTO>>(villas));//the distenation type is between <>
+            IEnumerable<Villa> villas = await _villaRepository.GetAll();
+            _response.Result = _mapper.Map<List<VillaDTO>>(villas);
+            _response.StatusCodeCode = HttpStatusCode.OK;
+            return Ok(_response);//the distenation type is between <>
         }
 
         [HttpGet("{id:int}", Name = "GetVilla")]//or {id:int}
@@ -32,7 +38,7 @@ namespace WebApplication1.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<VillaDTO>> GetVilla(int id)
+        public async Task<ActionResult<APIResponse>> GetVilla(int id)
         {
             if (id == 0)
             {
@@ -43,14 +49,16 @@ namespace WebApplication1.Controllers
             {
                 return NotFound();
             }
-            return Ok(_mapper.Map<VillaDTO>(villa));
+            _response.Result = _mapper.Map<VillaDTO>(villa);
+            _response.StatusCodeCode = HttpStatusCode.OK;
+            return Ok(_response);
         }
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<VillaDTO>> createVilla([FromBody] VillaDTOCreate createDTO)
+        public async Task<ActionResult<APIResponse>> createVilla([FromBody] VillaDTOCreate createDTO)
         {
             //if (!ModelState.IsValid)//this validation can be added in case we do not have [apiController] at the beginning
             //{
@@ -67,11 +75,14 @@ namespace WebApplication1.Controllers
             }
             //we need to convert villaDto to villa
             
-            T model = _mapper.Map<T>(createDTO);
+            Villa model = _mapper.Map<Villa>(createDTO);
         
             await _villaRepository.Create(model);
 
-            return CreatedAtRoute("GetVilla", new { id = model.Id }, model);// this returns 201 or just ok(object)
+            _response.Result = _mapper.Map<VillaDTO>(model);
+            _response.StatusCodeCode = HttpStatusCode.Created;
+
+            return CreatedAtRoute("GetVilla", new { id = model.Id }, _response);// this returns 201 or just ok(object)
         }
 
         [HttpDelete("{id:int}", Name = "DeleteVilla")]
@@ -79,7 +90,7 @@ namespace WebApplication1.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
 
-        public async Task<IActionResult> DeleteVilla(int id)
+        public async Task<ActionResult<APIResponse>> DeleteVilla(int id)
         {
             if (id == 0)
             {
@@ -90,15 +101,18 @@ namespace WebApplication1.Controllers
             {
                 return NotFound();
             }
-            _villaRepository.Remove(villa);
-            return NoContent();
+            await _villaRepository.Remove(villa);
+
+            _response.StatusCodeCode = HttpStatusCode.NoContent;
+            _response.IsSuccess = true;
+            return Ok(_response);
         }
 
         [HttpPut("{id:int}", Name = "UpdateVilla")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
 
-        public async Task<IActionResult> updateVilla(int id, [FromBody] VillaDTOUpdate updateDTO)
+        public async Task<ActionResult<APIResponse>> updateVilla(int id, [FromBody] VillaDTOUpdate updateDTO)
         {
 
             if (updateDTO == null || updateDTO.Id != id)
@@ -106,10 +120,13 @@ namespace WebApplication1.Controllers
                 return BadRequest();
             }
 
-            T model = _mapper.Map<T>(updateDTO);
+            Villa model = _mapper.Map<Villa>(updateDTO);
 
             await _villaRepository.Update(model);
-            return NoContent();
+
+            _response.StatusCodeCode = HttpStatusCode.NoContent;
+            _response.IsSuccess = true;
+            return Ok(_response);
 
         }
 
@@ -135,7 +152,7 @@ namespace WebApplication1.Controllers
             }
             patchDTO.ApplyTo(villaDTOUpdate, ModelState);
 
-            T model = _mapper.Map <T> (villaDTOUpdate);
+            Villa model = _mapper.Map <Villa> (villaDTOUpdate);
             await _villaRepository.Update(model);
 
             if (!ModelState.IsValid)
