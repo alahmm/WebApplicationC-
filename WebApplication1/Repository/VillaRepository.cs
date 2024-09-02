@@ -55,5 +55,11 @@ namespace Magi.Repository
         {
             await _db.SaveChangesAsync();
         }
+
+        public async Task Update(Villa villa)
+        {
+            _db.Villas.Update(villa);
+            await Save();
+        }
     }
 }

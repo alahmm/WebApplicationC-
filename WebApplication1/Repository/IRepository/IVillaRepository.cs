@@ -12,5 +12,6 @@ namespace Magi.Repository.IRepository
         Task Create(Villa villa);
         Task Remove(Villa villa);
         Task Save();
+        Task Update (Villa villa);
     }
 }

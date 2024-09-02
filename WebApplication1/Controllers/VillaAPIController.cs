@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Magi.Repository.IRepository;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,17 +13,17 @@ namespace WebApplication1.Controllers
     [ApiController]//activate the validation
     public class VillaAPIController : ControllerBase
     {
-        private readonly ApplicationDbContext _db;
+        private readonly IVillaRepository _villaRepository;
         private readonly IMapper _mapper;
-        public VillaAPIController(ApplicationDbContext db, IMapper mapper) {
-            _db = db;
+        public VillaAPIController(IVillaRepository villaReposirory, IMapper mapper) {
+            _villaRepository = villaReposirory;
             _mapper = mapper;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<VillaDTO>>> GetVillas()
         {
-            IEnumerable<Villa> villas = await _db.Villas.ToListAsync();
+            IEnumerable<Villa> villas = await _villaRepository.GetAll();
             return Ok(_mapper.Map<List<VillaDTO>>(villas));//the distenation type is between <>
         }
 
@@ -37,7 +38,7 @@ namespace WebApplication1.Controllers
             {
                 return BadRequest();
             }
-            var villa = await _db.Villas.FirstOrDefaultAsync(u => u.Id == id);
+            var villa = await _villaRepository.Get(u => u.Id == id);
             if (villa == null)
             {
                 return NotFound();
@@ -55,7 +56,7 @@ namespace WebApplication1.Controllers
             //{
             //    return BadRequest(ModelState);
             //}
-            if (await _db.Villas.FirstOrDefaultAsync(u => u.Name.ToLower() == createDTO.Name.ToLower()) != null)
+            if (await _villaRepository.Get(u => u.Name.ToLower() == createDTO.Name.ToLower()) != null)
             {
                 ModelState.AddModelError("customError", "Villa already exists");//
                 return BadRequest(ModelState);
@@ -68,8 +69,7 @@ namespace WebApplication1.Controllers
             
             Villa model = _mapper.Map<Villa>(createDTO);
         
-            await _db.Villas.AddAsync(model);
-            await _db.SaveChangesAsync();
+            await _villaRepository.Create(model);
 
             return CreatedAtRoute("GetVilla", new { id = model.Id }, model);// this returns 201 or just ok(object)
         }
@@ -85,13 +85,12 @@ namespace WebApplication1.Controllers
             {
                 return BadRequest();
             }
-            var villa = await _db.Villas.FirstOrDefaultAsync(u => u.Id == id);
+            var villa = await _villaRepository.Get(u => u.Id == id);
             if (villa == null)
             {
                 return NotFound();
             }
-            _db.Villas.Remove(villa);
-            await _db.SaveChangesAsync();
+            _villaRepository.Remove(villa);
             return NoContent();
         }
 
@@ -109,8 +108,7 @@ namespace WebApplication1.Controllers
 
             Villa model = _mapper.Map<Villa>(updateDTO);
 
-            _db.Villas.Update(model);
-            await _db.SaveChangesAsync();
+            await _villaRepository.Update(model);
             return NoContent();
 
         }
@@ -127,7 +125,7 @@ namespace WebApplication1.Controllers
             {
                 return BadRequest();
             }
-            var villa = await _db.Villas.AsNoTracking().FirstOrDefaultAsync(u => u.Id == id);//to have the ability to use the same id again for the model
+            var villa = await _villaRepository.Get(u => u.Id == id, tracked:false);//to have the ability to use the same id again for the model
 
             VillaDTOUpdate villaDTOUpdate = _mapper.Map<VillaDTOUpdate>(villa);
  
@@ -138,8 +136,7 @@ namespace WebApplication1.Controllers
             patchDTO.ApplyTo(villaDTOUpdate, ModelState);
 
             Villa model = _mapper.Map <Villa> (villaDTOUpdate);
-            _db.Villas.Update(model);
-            await _db.SaveChangesAsync();
+            await _villaRepository.Update(model);
 
             if (!ModelState.IsValid)
             {
