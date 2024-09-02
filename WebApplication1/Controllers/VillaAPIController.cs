@@ -45,7 +45,7 @@ namespace WebApplication1.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<VillaDTO> createVilla([FromBody] VillaDTO villaDTO)
+        public ActionResult<VillaDTO> createVilla([FromBody] VillaDTOCreate villaDTO)
         {
             //if (!ModelState.IsValid)//this validation can be added in case we do not have [apiController] at the beginning
             //{
@@ -60,17 +60,12 @@ namespace WebApplication1.Controllers
             {
                 return BadRequest(villaDTO);
             }
-            if (villaDTO.Id > 0)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
             //we need to convert villaDto to villa
             
             Villa model = new ()
             {
                 Amenity = villaDTO.Amenity,
                 Details = villaDTO.Details,
-                Id = villaDTO.Id,
                 Name = villaDTO.Name,
                 ImageUrl = villaDTO.ImageUrl,
                 Occupancy = villaDTO.Occupancy,
@@ -81,7 +76,7 @@ namespace WebApplication1.Controllers
             _db.Villas.Add(model);
             _db.SaveChanges();
 
-            return CreatedAtRoute("GetVilla", new { id = villaDTO.Id }, villaDTO);// this returns 201 or just ok(object)
+            return CreatedAtRoute("GetVilla", new { id = model.Id }, model);// this returns 201 or just ok(object)
         }
 
         [HttpDelete("{id:int}", Name = "DeleteVilla")]
@@ -109,7 +104,7 @@ namespace WebApplication1.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
 
-        public IActionResult updateVilla(int id, [FromBody] VillaDTO villaDTO)
+        public IActionResult updateVilla(int id, [FromBody] VillaDTOUpdate villaDTO)
         {
 
             if (villaDTO == null || villaDTO.Id != id)
@@ -145,7 +140,7 @@ namespace WebApplication1.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
 
-        public IActionResult updatePartialVilla(int id, JsonPatchDocument<VillaDTO> patchDTO)
+        public IActionResult updatePartialVilla(int id, JsonPatchDocument<VillaDTOUpdate> patchDTO)
         {
             if (patchDTO == null || id == 0)
             {
@@ -153,7 +148,7 @@ namespace WebApplication1.Controllers
             }
             var villa = _db.Villas.AsNoTracking().FirstOrDefault(u => u.Id == id);//to have the ability to use the same id again for the model
 
-            VillaDTO villaDTO = new()
+            VillaDTOUpdate villaDTO = new()
             {
                 Amenity = villa.Amenity,
                 Details = villa.Details,
