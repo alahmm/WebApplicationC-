@@ -1,6 +1,7 @@
 
 
 using Magi;
+using Magi.Repository;
 using Magi.Repository.IRepository;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
@@ -16,7 +17,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(option =>
 {
     option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultSQLConnection"));
 });
-builder.Services.AddScoped<IVillaRepository, IVillaRepository>();
+builder.Services.AddScoped<IVillaRepository, VillaRepository>();
 builder.Services.AddAutoMapper(typeof(MappingConfig));
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
