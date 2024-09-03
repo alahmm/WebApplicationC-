@@ -1,13 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Magi.Models;
+using Microsoft.EntityFrameworkCore;
 using WebApplication1.Models;
 
 namespace WebApplication1.Data
 {
     public class ApplicationDbContext : DbContext
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }//then navigate to tools => nuget package manager=> type in console add-migration AddVillaTable
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }//then navigate to tools => nuget package manager=> type in console add-migration AddVillaTable to update migration
         public DbSet<Villa> Villas { get; set; } //that will be the name of the table=> then to apply these migrations run the command update-database
-
+        public DbSet<VillaNumber> VillaNumbers { get; set; } //second table
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Villa>().HasData(
