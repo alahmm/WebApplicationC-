@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Magi.Models;
 using Magi.Repository.IRepository;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -18,11 +19,13 @@ namespace WebApplication1.Controllers
         protected APIResponse _response;
         private readonly IVillaNumberRepository _villaNumberRepository;
         private readonly IMapper _mapper;
-        public VillaNumberAPIController(IVillaNumberRepository villaNumberReposirory, IMapper mapper)
+        private readonly IVillaRepository _villaRepository;
+        public VillaNumberAPIController(IVillaNumberRepository villaNumberReposirory, IMapper mapper, IVillaRepository villaRepository)
         {
             _villaNumberRepository = villaNumberReposirory;
             _mapper = mapper;
             this._response = new();
+            _villaRepository = villaRepository;
         }
 
         [HttpGet]
@@ -83,6 +86,12 @@ namespace WebApplication1.Controllers
         {
             try
             {
+                var villa = await _villaRepository.Get(u => u.Id == createDTO.VillaID);
+                if (villa == null)
+                {
+                    ModelState.AddModelError("customError", "Villa ID is Invalid.");
+                    return BadRequest(ModelState);
+                }
                 if (await _villaNumberRepository.Get(u => u.VillaNo == createDTO.VillaNo) != null)
                 {
                     ModelState.AddModelError("customError", "Villa Number already exists");//
@@ -149,10 +158,15 @@ namespace WebApplication1.Controllers
 
         public async Task<ActionResult<APIResponse>> updateVillaNumber(int id, [FromBody] VillaNumberUpdateDTO updateDTO)
         {
-            try
+            try { 
+                var villa = await _villaRepository.Get(u => u.Id == updateDTO.VillaID);
+            if (villa == null)
             {
+                ModelState.AddModelError("customError", "Villa ID is Invalid.");
+                return BadRequest(ModelState);
+            }
 
-                if (updateDTO == null || updateDTO.VillaNo != id)
+            if (updateDTO == null || updateDTO.VillaNo != id)
                 {
                     return BadRequest();
                 }
