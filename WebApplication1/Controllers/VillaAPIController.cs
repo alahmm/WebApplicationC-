@@ -11,8 +11,8 @@ using WebApplication1.Models.Dto;
 
 namespace WebApplication1.Controllers
 {
-    [Route("/api/[controller]")]
-    [ApiController]//activate the validation
+	[Route("/api/[controller]")]
+	[ApiController]//activate the validation
     public class VillaAPIController : ControllerBase
     {
         protected APIResponse _response;

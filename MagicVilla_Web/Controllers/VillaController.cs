@@ -19,14 +19,24 @@ namespace MagicVilla_Web.Controllers
         }
         public async Task<IActionResult> IndexVilla()
         {
-            List<VillaDTO> list = new();
-            var response = await _villaService.GetAllAsync<APIResponse>();
-            if (response != null && response.IsSuccess)
-            {
-                list = JsonConvert.DeserializeObject<List<VillaDTO>>(Convert.ToString(response.Result));
-            }
+			List<VillaDTO> list = new();
+			try
+			{
+				var response2 = await _villaService.GetAsync<APIResponse>(4);
 
-            return View(list);
-        }
+				var response = await _villaService.GetAllAsync<APIResponse>();
+
+				if (response != null && response.IsSuccess)
+				{
+					list = JsonConvert.DeserializeObject<List<VillaDTO>>(Convert.ToString(response.Result));
+				}
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine($"Fehler: {ex.Message}");
+			}
+
+			return View(list);
+		}
     }
 }
