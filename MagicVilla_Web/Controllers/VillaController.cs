@@ -52,5 +52,63 @@ namespace MagicVilla_Web.Controllers
 			}
 			return View(villaDTO);
 		}
-	}
+
+        public async Task<IActionResult> UpdateVilla(int villaId)
+        {
+
+            var response = await _villaService.GetAsync<APIResponse>(villaId);
+
+            if (response != null && response.IsSuccess)
+            {
+                VillaDTO model = JsonConvert.DeserializeObject<VillaDTO>(Convert.ToString(response.Result));
+                return View(_mapper.Map<VillaDTOUpdate>(model));
+            }
+
+            return NotFound();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateVilla(VillaDTOUpdate villaDTO)
+        {
+            if (ModelState.IsValid)//check the validity of properties that we defined alredy in villacreteDTO
+            {
+                var response = await _villaService.UpdateAsync<APIResponse>(villaDTO);
+
+                if (response != null && response.IsSuccess)
+                {
+                    return RedirectToAction(nameof(IndexVilla));
+                }
+            }
+            return View(villaDTO);//update view
+        }
+
+        public async Task<IActionResult> DeleteVilla(int villaId)
+        {
+
+            var response = await _villaService.GetAsync<APIResponse>(villaId);
+
+            if (response != null && response.IsSuccess)
+            {
+                VillaDTO model = JsonConvert.DeserializeObject<VillaDTO>(Convert.ToString(response.Result));
+                return View(model);
+            }
+
+            return NotFound();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteVilla(VillaDTO villaDTO)
+        {
+
+             var response = await _villaService.DeleteAsync<APIResponse>(villaDTO.Id);
+
+            if (response != null && response.IsSuccess)
+            {
+                return RedirectToAction(nameof(IndexVilla));
+            }
+            return View(villaDTO);//delete view
+        }
+    }
 }
