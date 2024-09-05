@@ -4,6 +4,7 @@ using MagicVilla_Web.Models.Dto;
 using MagicVilla_Web.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace MagicVilla_Web.Controllers
 {
@@ -20,23 +21,36 @@ namespace MagicVilla_Web.Controllers
         public async Task<IActionResult> IndexVilla()
         {
 			List<VillaDTO> list = new();
-			try
-			{
-				var response2 = await _villaService.GetAsync<APIResponse>(4);
+			var response = await _villaService.GetAllAsync<APIResponse>();
 
-				var response = await _villaService.GetAllAsync<APIResponse>();
+			if (response != null && response.IsSuccess)
+			{
+				list = JsonConvert.DeserializeObject<List<VillaDTO>>(Convert.ToString(response.Result));
+			}
+		
+			return View(list);
+		}
+
+		public async Task<IActionResult> CreateVilla()
+		{
+			
+			return View();
+		}
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> CreateVilla(VillaDTOCreate villaDTO)
+		{
+			if (ModelState.IsValid)//check the validity of properties that we defined alredy in villacreteDTO
+			{
+				var response = await _villaService.CreateAsync<APIResponse>(villaDTO);
 
 				if (response != null && response.IsSuccess)
 				{
-					list = JsonConvert.DeserializeObject<List<VillaDTO>>(Convert.ToString(response.Result));
+					return RedirectToAction(nameof(IndexVilla));
 				}
 			}
-			catch (Exception ex)
-			{
-				Console.WriteLine($"Fehler: {ex.Message}");
-			}
-
-			return View(list);
+			return View(villaDTO);
 		}
-    }
+	}
 }

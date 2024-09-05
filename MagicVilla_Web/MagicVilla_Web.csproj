@@ -15,4 +15,12 @@
     <ProjectReference Include="..\MagicVilla_Utility\MagicVilla_Utility.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Villa\CreateVilla.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Views\Villa\CreateVilla.cshtml" />
+  </ItemGroup>
+
 </Project>
