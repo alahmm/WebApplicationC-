@@ -12,7 +12,7 @@ using WebApplication1.Models.Dto;
 
 namespace WebApplication1.Controllers
 {
-    [Route("/api/[controller]")]
+    [Route("/api/VillaNumberAPI")]
     [ApiController]//activate the validation
     public class VillaNumberAPIController : ControllerBase
     {
@@ -33,7 +33,7 @@ namespace WebApplication1.Controllers
         {
             try
             {
-                IEnumerable<VillaNumber> villaNumbers = await _villaNumberRepository.GetAll();
+                IEnumerable<VillaNumber> villaNumbers = await _villaNumberRepository.GetAll(includeProperties:"Villa");
                 _response.Result = _mapper.Map<List<VillaNumberDTO>>(villaNumbers);
                 _response.StatusCodeCode = HttpStatusCode.OK;
                 return Ok(_response);//the distenation type is between <>

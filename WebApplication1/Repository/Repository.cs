@@ -12,6 +12,7 @@ namespace Magi.Repository
         public Repository(ApplicationDbContext db)
         {
             this.db = db;
+      //      this.db.VillaNumbers.Include(u => u.Villa).ToList(); this line of code is just for verification to make sure that the right property is beeing used
             this.dbSet = this.db.Set<T>();
         }
         public async Task Create(T entity)
@@ -20,7 +21,7 @@ namespace Magi.Repository
             await Save();
         }
 
-        public async Task<T> Get(Expression<Func<T, bool>> filter = null, bool tracked = true)
+        public async Task<T> Get(Expression<Func<T, bool>> filter = null, bool tracked = true, string? includeProperties = null)
         {
             IQueryable<T> query = dbSet;
             if (!tracked)
@@ -31,15 +32,29 @@ namespace Magi.Repository
             {
                 query = query.Where(filter);
             }
+            if (includeProperties != null)
+            {
+                foreach (var property in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(property);
+                }
+            }
             return await query.FirstOrDefaultAsync();
         }
 
-        public async Task<List<T>> GetAll(Expression<Func<T, bool>>? filter = null)// ? means that the filter here can be null
+        public async Task<List<T>> GetAll(Expression<Func<T, bool>>? filter = null, string? includeProperties = null)// ? means that the filter here can be null
         {
             IQueryable<T> query = dbSet;
             if (filter != null)
             {
                 query = query.Where(filter);
+            }
+            if (includeProperties != null)
+            {
+                foreach (var property in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(property);
+                }
             }
             return await query.ToListAsync();
 
