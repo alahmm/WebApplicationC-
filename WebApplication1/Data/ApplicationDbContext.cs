@@ -16,8 +16,8 @@ namespace WebApplication1.Data
                 {
                     Id = 1,
                     Name="royal villa",
-                    Details="hi",
-                    ImageUrl= "https://dotnetmasteryimages.blob.core.windows.net/bluevillaimages/villa3.jpg",         
+                    Details="i like this villa",
+                    ImageUrl= "http://dotnetmastery.com/bluevillaimages/villa1.jpg",         
                     Occupancy=5,
                     Rate = 200,
                     Sqft =550,
@@ -27,16 +27,41 @@ namespace WebApplication1.Data
                 new Villa()
                 {
                     Id = 2,
-                    Name = "royal2 villa",
-                    Details = "hihi",
-                    ImageUrl = "https://dotnetmasteryimages.blob.core.windows.net/bluevillaimages/villa2.jpg",
-                    Occupancy = 5,
-                    Rate = 202,
+                    Name = "Premium Pool Villa",
+                    Details = "here is the best villa",
+                    ImageUrl = "http://dotnetmastery.com/bluevillaimages/villa2.jpg",
+                    Occupancy = 4,
+                    Rate = 300,
                     Sqft = 552,
                     Amenity = "",
                     CreatedDate= DateTime.Now
-                }
-                );
+                },
+				new Villa()
+				{
+					Id = 3,
+					Name = "Luxury Pool Villa",
+					Details = "just woow",
+					ImageUrl = "http://dotnetmastery.com/bluevillaimages/villa3.jpg",
+					Occupancy = 4,
+					Rate = 300,
+					Sqft = 552,
+					Amenity = "",
+					CreatedDate = DateTime.Now
+				},
+
+				new Villa()
+				{
+					Id = 4,
+					Name = "Diamand Villa",
+					Details = "oh",
+					ImageUrl = "http://dotnetmastery.com/bluevillaimages/villa4.jpg",
+					Occupancy = 4,
+					Rate = 300,
+					Sqft = 552,
+					Amenity = "",
+					CreatedDate = DateTime.Now
+				}
+				);
         }
     }
 }
