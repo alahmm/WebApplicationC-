@@ -47,10 +47,12 @@ namespace MagicVilla_Web.Controllers
 
 				if (response != null && response.IsSuccess)
 				{
-					return RedirectToAction(nameof(IndexVilla));
+                    TempData["success"] = "Villa created successfully";
+                    return RedirectToAction(nameof(IndexVilla));
 				}
 			}
-			return View(villaDTO);
+            TempData["error"] = "Error encountered.";
+            return View(villaDTO);
 		}
 
         public async Task<IActionResult> UpdateVilla(int villaId)
@@ -77,9 +79,11 @@ namespace MagicVilla_Web.Controllers
 
                 if (response != null && response.IsSuccess)
                 {
+                    TempData["success"] = "Villa updated successfully";
                     return RedirectToAction(nameof(IndexVilla));
                 }
             }
+            TempData["error"] = "Error encountered.";
             return View(villaDTO);//update view
         }
 
@@ -106,8 +110,10 @@ namespace MagicVilla_Web.Controllers
 
             if (response != null && response.IsSuccess)
             {
+                TempData["success"] = "Villa deleted successfully";
                 return RedirectToAction(nameof(IndexVilla));
             }
+            TempData["error"] = "Error encountered.";
             return View(villaDTO);//delete view
         }
     }
