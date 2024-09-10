@@ -89,12 +89,12 @@ namespace WebApplication1.Controllers
                 var villa = await _villaRepository.Get(u => u.Id == createDTO.VillaID);
                 if (villa == null)
                 {
-                    ModelState.AddModelError("customError", "Villa ID is Invalid.");
+                    ModelState.AddModelError("ErrorMessages", "Villa ID is Invalid.");
                     return BadRequest(ModelState);
                 }
                 if (await _villaNumberRepository.Get(u => u.VillaNo == createDTO.VillaNo) != null)
                 {
-                    ModelState.AddModelError("customError", "Villa Number already exists");//
+                    ModelState.AddModelError("ErrorMessages", "Villa Number already exists");//
                     return BadRequest(ModelState);
                 }
                 if (createDTO == null)
@@ -162,7 +162,7 @@ namespace WebApplication1.Controllers
                 var villa = await _villaRepository.Get(u => u.Id == updateDTO.VillaID);
             if (villa == null)
             {
-                ModelState.AddModelError("customError", "Villa ID is Invalid.");
+                ModelState.AddModelError("ErrorMessages", "Villa ID is Invalid.");
                 return BadRequest(ModelState);
             }
 
