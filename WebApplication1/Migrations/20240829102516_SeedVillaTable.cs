@@ -18,8 +18,7 @@ namespace Magi.Migrations
                 columns: new[] { "Id", "Amenity", "CreatedDate", "Details", "ImageUrl", "Name", "Occupancy", "Rate", "Sqft", "UpdatedDate" },
                 values: new object[,]
                 {
-                    { 1, "", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "hi", "https://dotnetmasteryimages.blob.core.windows.net/bluevillaimages/villa3.jpg", "royal villa", 5, 200.0, 550, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 2, "", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "hihi", "https://dotnetmasteryimages.blob.core.windows.net/bluevillaimages/villa2.jpg", "royal2 villa", 5, 202.0, 552, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) }
+                    { 1, "", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "hi", "https://dotnetmasteryimages.blob.core.windows.net/bluevillaimages/villa3.jpg", "royal villa", 5, 200.0, 550, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) }
                 });
         }
 

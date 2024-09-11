@@ -11,12 +11,12 @@ namespace Magi.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<int>(
-                name: "VillaID",
-                table: "VillaNumbers",
-                type: "int",
-                nullable: false,
-                defaultValue: 0);
+            //migrationBuilder.AddColumn<int>(
+            //    name: "VillaID",
+            //    table: "VillaNumbers",
+            //    type: "int",
+            //    nullable: false,
+            //    defaultValue: 0);
 
             migrationBuilder.UpdateData(
                 table: "Villas",
@@ -32,18 +32,18 @@ namespace Magi.Migrations
                 column: "CreatedDate",
                 value: new DateTime(2024, 9, 3, 11, 54, 30, 622, DateTimeKind.Local).AddTicks(6075));
 
-            migrationBuilder.CreateIndex(
-                name: "IX_VillaNumbers_VillaID",
-                table: "VillaNumbers",
-                column: "VillaID");
+            //migrationBuilder.CreateIndex(
+            //    name: "IX_VillaNumbers_VillaID",
+            //    table: "VillaNumbers",
+            //    column: "VillaID");
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_VillaNumbers_Villas_VillaID",
-                table: "VillaNumbers",
-                column: "VillaID",
-                principalTable: "Villas",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);//if villa is deleted, the villa number will be also deleted
+            //migrationBuilder.AddForeignKey(
+            //    name: "FK_VillaNumbers_Villas_VillaID",
+            //    table: "VillaNumbers",
+            //    column: "VillaID",
+            //    principalTable: "Villas",
+            //    principalColumn: "Id",
+            //    onDelete: ReferentialAction.Cascade);//if villa is deleted, the villa number will be also deleted
         }
 
         /// <inheritdoc />

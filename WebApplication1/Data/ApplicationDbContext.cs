@@ -26,18 +26,18 @@ namespace WebApplication1.Data
                     Amenity="",
                     CreatedDate= DateTime.Now
                 },
-                new Villa()
-                {
-                    Id = 2,
-                    Name = "Premium Pool Villa",
-                    Details = "here is the best villa",
-                    ImageUrl = "http://dotnetmastery.com/bluevillaimages/villa2.jpg",
-                    Occupancy = 4,
-                    Rate = 300,
-                    Sqft = 552,
-                    Amenity = "",
-                    CreatedDate= DateTime.Now
-                },
+                //new Villa()
+                //{
+                //    Id = 2,
+                //    Name = "Premium Pool Villa",
+                //    Details = "here is the best villa",
+                //    ImageUrl = "http://dotnetmastery.com/bluevillaimages/villa2.jpg",
+                //    Occupancy = 4,
+                //    Rate = 300,
+                //    Sqft = 552,
+                //    Amenity = "",
+                //    CreatedDate= DateTime.Now
+                //},
 				new Villa()
 				{
 					Id = 3,
