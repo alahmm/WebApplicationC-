@@ -35,7 +35,7 @@ namespace WebApplication1.Controllers
             {
                 IEnumerable<VillaNumber> villaNumbers = await _villaNumberRepository.GetAll(includeProperties:"Villa");
                 _response.Result = _mapper.Map<List<VillaNumberDTO>>(villaNumbers);
-                _response.StatusCodeCode = HttpStatusCode.OK;
+                _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);//the distenation type is between <>
             }
             catch (Exception ex)
@@ -56,17 +56,17 @@ namespace WebApplication1.Controllers
             {
                 if (id == 0)
                 {
-                    _response.StatusCodeCode = HttpStatusCode.BadRequest;
+                    _response.StatusCode = HttpStatusCode.BadRequest;
                     return BadRequest(_response);
                 }
                 var villaNumber = await _villaNumberRepository.Get(u => u.VillaNo == id);
                 if (villaNumber == null)
                 {
-                    _response.StatusCodeCode = HttpStatusCode.NotFound;
+                    _response.StatusCode = HttpStatusCode.NotFound;
                     return NotFound(_response);
                 }
                 _response.Result = _mapper.Map<VillaNumberDTO>(villaNumber);
-                _response.StatusCodeCode = HttpStatusCode.OK;
+                _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
             }
             catch (Exception ex)
@@ -107,7 +107,7 @@ namespace WebApplication1.Controllers
                 await _villaNumberRepository.Create(model);
 
                 _response.Result = _mapper.Map<VillaNumberDTO>(model);
-                _response.StatusCodeCode = HttpStatusCode.Created;
+                _response.StatusCode = HttpStatusCode.Created;
 
                 return CreatedAtRoute("GetVillaNumber", new { id = model.VillaNo }, _response);// this returns 201 or just ok(object)
             }
@@ -140,7 +140,7 @@ namespace WebApplication1.Controllers
                 }
                 await _villaNumberRepository.Remove(villaNumber);
 
-                _response.StatusCodeCode = HttpStatusCode.NoContent;
+                _response.StatusCode = HttpStatusCode.NoContent;
                 _response.IsSuccess = true;
                 return Ok(_response);
             }
@@ -175,7 +175,7 @@ namespace WebApplication1.Controllers
 
                 await _villaNumberRepository.Update(model);
 
-                _response.StatusCodeCode = HttpStatusCode.NoContent;
+                _response.StatusCode = HttpStatusCode.NoContent;
                 _response.IsSuccess = true;
                 return Ok(_response);
             }

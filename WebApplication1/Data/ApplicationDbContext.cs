@@ -1,5 +1,4 @@
 ﻿using Magi.Models;
-using MagicVilla_Web.Models;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Models;
 
