@@ -1,4 +1,5 @@
 ﻿using Magi.Models;
+using MagicVilla_Web.Models;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Models;
 
@@ -9,6 +10,7 @@ namespace WebApplication1.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }//then navigate to tools => nuget package manager=> type in console add-migration AddVillaTable to update migration
         public DbSet<Villa> Villas { get; set; } //that will be the name of the table=> then to apply these migrations run the command update-database
         public DbSet<VillaNumber> VillaNumbers { get; set; } //second table
+        public DbSet<LocalUser> users { get; set; } //second table
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Villa>().HasData(
@@ -47,20 +49,20 @@ namespace WebApplication1.Data
 					Sqft = 552,
 					Amenity = "",
 					CreatedDate = DateTime.Now
-				},
-
-				new Villa()
-				{
-					Id = 4,
-					Name = "Diamand Villa",
-					Details = "oh",
-					ImageUrl = "http://dotnetmastery.com/bluevillaimages/villa4.jpg",
-					Occupancy = 4,
-					Rate = 300,
-					Sqft = 552,
-					Amenity = "",
-					CreatedDate = DateTime.Now
 				}
+
+				//new Villa()
+				//{
+				//	Id = 4,
+				//	Name = "Diamand Villa",
+				//	Details = "oh",
+				//	ImageUrl = "http://dotnetmastery.com/bluevillaimages/villa4.jpg",
+				//	Occupancy = 4,
+				//	Rate = 300,
+				//	Sqft = 552,
+				//	Amenity = "",
+				//	CreatedDate = DateTime.Now
+				//}
 				);
         }
     }
