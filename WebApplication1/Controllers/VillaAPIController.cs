@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Magi.Models;
 using Magi.Repository.IRepository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -26,6 +27,8 @@ namespace WebApplication1.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [Authorize]
         public async Task<ActionResult<APIResponse>> GetVillas()
         {
             try
@@ -44,7 +47,8 @@ namespace WebApplication1.Controllers
         }
 
         [HttpGet("{id:int}", Name = "GetVilla")]//or {id:int}
-                                                //[ProducesResponseType(200), Type = typeof(VillaDTO)]
+        [Authorize(Roles ="admin")]
+        //[ProducesResponseType(200), Type = typeof(VillaDTO)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -117,7 +121,7 @@ namespace WebApplication1.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-
+        [Authorize(Roles = "CUSTOM")]
         public async Task<ActionResult<APIResponse>> DeleteVilla(int id)
         {
             try
