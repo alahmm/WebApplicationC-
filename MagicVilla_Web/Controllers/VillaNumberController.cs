@@ -3,6 +3,7 @@ using MagicVilla_Web.Models;
 using MagicVilla_Web.Models.Dto;
 using MagicVilla_Web.Models.VM;
 using MagicVilla_Web.Services.IServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
@@ -35,7 +36,8 @@ namespace MagicVilla_Web.Controllers
 			return View(list);
 		}
 
-		public async Task<IActionResult> CreateVillaNumber()
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> CreateVillaNumber()
 		{
             VillaNumberCreateVM villaNumberVM = new();
             var response = await _villaService.GetAllAsync<APIResponse>();
@@ -51,8 +53,8 @@ namespace MagicVilla_Web.Controllers
             }
             return View(villaNumberVM);
 		}
-
-		[HttpPost]
+        [Authorize(Roles = "admin")]
+        [HttpPost]
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> CreateVillaNumber(VillaNumberCreateVM villaNumberDTO)
 		{
@@ -86,8 +88,8 @@ namespace MagicVilla_Web.Controllers
             }
             return View(villaNumberDTO);
 		}
-
-		public async Task<IActionResult> UpdateVillaNumber(int villaNo)
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> UpdateVillaNumber(int villaNo)
 		{
             VillaNumberUpdateVM villaNumberVM = new();
             var response = await _villaNumberService.GetAsync<APIResponse>(villaNo);
@@ -113,8 +115,8 @@ namespace MagicVilla_Web.Controllers
 
             return NotFound();
 		}
-
-		[HttpPost]
+        [Authorize(Roles = "admin")]
+        [HttpPost]
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> UpdateVillaNumber(VillaNumberUpdateVM villaNumberDTO)
 		{
@@ -148,8 +150,8 @@ namespace MagicVilla_Web.Controllers
             }
             return View(villaNumberDTO);
         }
-
-		public async Task<IActionResult> DeleteVillaNumber(int villaNo)
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> DeleteVillaNumber(int villaNo)
 		{
 
             VillaNumberDeleteVM villaNumberVM = new();
@@ -175,8 +177,8 @@ namespace MagicVilla_Web.Controllers
 
             return NotFound();
         }
-
-		[HttpPost]
+        [Authorize(Roles = "admin")]
+        [HttpPost]
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> DeleteVillaNumber(VillaNumberDeleteVM villaDTO)
 		{
