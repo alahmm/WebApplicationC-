@@ -28,6 +28,8 @@ namespace WebApplication1.Controllers
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [Authorize]
         public async Task<ActionResult<APIResponse>> GetVillas()
         {
@@ -49,6 +51,8 @@ namespace WebApplication1.Controllers
         [HttpGet("{id:int}", Name = "GetVilla")]//or {id:int}
         [Authorize(Roles ="admin")]
         //[ProducesResponseType(200), Type = typeof(VillaDTO)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -119,6 +123,8 @@ namespace WebApplication1.Controllers
 
         [HttpDelete("{id:int}", Name = "DeleteVilla")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Authorize(Roles = "CUSTOM")]
