@@ -30,7 +30,7 @@ namespace WebApplication1.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [Authorize]
+        //[Authorize]
         public async Task<ActionResult<APIResponse>> GetVillas()
         {
             try
