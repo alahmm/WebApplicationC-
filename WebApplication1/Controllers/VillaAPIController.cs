@@ -30,7 +30,7 @@ namespace WebApplication1.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [Authorize]
+        //[Authorize]
         public async Task<ActionResult<APIResponse>> GetVillas()
         {
             try
@@ -49,7 +49,7 @@ namespace WebApplication1.Controllers
         }
 
         [HttpGet("{id:int}", Name = "GetVilla")]//or {id:int}
-        [Authorize(Roles ="admin")]
+       // [Authorize(Roles ="admin")]
         //[ProducesResponseType(200), Type = typeof(VillaDTO)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -88,6 +88,7 @@ namespace WebApplication1.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Authorize(Roles = "admin")]
         public async Task<ActionResult<APIResponse>> createVilla([FromBody] VillaDTOCreate createDTO)
         {
             try
@@ -127,7 +128,7 @@ namespace WebApplication1.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [Authorize(Roles = "CUSTOM")]
+        [Authorize(Roles = "admin")]
         public async Task<ActionResult<APIResponse>> DeleteVilla(int id)
         {
             try
@@ -158,7 +159,7 @@ namespace WebApplication1.Controllers
         [HttpPut("{id:int}", Name = "UpdateVilla")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-
+        [Authorize(Roles = "admin")]
         public async Task<ActionResult<APIResponse>> updateVilla(int id, [FromBody] VillaDTOUpdate updateDTO)
         {
             try
