@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Magi.Models;
 using Magi.Repository.IRepository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -50,6 +51,7 @@ namespace WebApplication1.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+
         public async Task<ActionResult<APIResponse>> GetVillaNumber(int id)
         {
             try
@@ -82,6 +84,7 @@ namespace WebApplication1.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Authorize(Roles = "admin")]
         public async Task<ActionResult<APIResponse>> createVillaNumber([FromBody] VillaNumberCreateDTO createDTO)
         {
             try
@@ -124,7 +127,7 @@ namespace WebApplication1.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-
+        [Authorize(Roles = "admin")]
         public async Task<ActionResult<APIResponse>> DeleteVillaNumber(int id)
         {
             try
@@ -151,7 +154,7 @@ namespace WebApplication1.Controllers
             }
             return _response;
         }
-
+        [Authorize(Roles = "admin")]
         [HttpPut("{id:int}", Name = "UpdateVillaNumber")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -170,7 +173,6 @@ namespace WebApplication1.Controllers
                 {
                     return BadRequest();
                 }
-
                 VillaNumber model = _mapper.Map<VillaNumber>(updateDTO);
 
                 await _villaNumberRepository.Update(model);
