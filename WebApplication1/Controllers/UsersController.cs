@@ -1,4 +1,5 @@
-﻿using Magi.Models;
+﻿using Asp.Versioning;
+using Magi.Models;
 using Magi.Models.Dto;
 using Magi.Repository.IRepository;
 using Microsoft.AspNetCore.Mvc;
@@ -6,8 +7,9 @@ using System.Net;
 
 namespace Magi.Controllers
 {
-    [Route("/api/UsersAuth")]
+    [Route("/api/v{version:apiVersion}/UsersAuth")]
     [ApiController]
+    [ApiVersionNeutral]
     public class UsersController : Controller
     {
         private readonly IUserRepository _userRepository;
