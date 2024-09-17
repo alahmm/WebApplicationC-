@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
+using System.Text.Json;
 using WebApplication1.Data;
 using WebApplication1.Models;
 using WebApplication1.Models.Dto;
@@ -32,22 +33,30 @@ namespace Magi.Controllers.v1
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         //[Authorize]
-        public async Task<ActionResult<APIResponse>> GetVillas([FromQuery(Name ="filterOccupancy")]int? occupancy, [FromQuery] string? search)
+        public async Task<ActionResult<APIResponse>> GetVillas([FromQuery(Name ="filterOccupancy")]int? occupancy, [FromQuery] string? search,
+            int pageSize = 0, int pageNumber = 1)
         {
             try
             {
                 IEnumerable<Villa> villas;
 
                 if (occupancy > 0) {
-                    villas = await _villaRepository.GetAll(u => u.Occupancy == occupancy);
+                    villas = await _villaRepository.GetAll(u => u.Occupancy == occupancy, pageSize:pageSize,
+                        pageNumber:pageNumber);
                 } else
                 {
-                    villas= await _villaRepository.GetAll();
+                    villas= await _villaRepository.GetAll(pageSize: pageSize, pageNumber: pageNumber);
                 }
                 if (!string.IsNullOrEmpty(search))
                 {
                     villas = villas.Where(u => u.Name.ToLower().Contains(search));
                 }
+                Pagination pagination = new()
+                {
+                    PageNumber = pageNumber,
+                    PageSize = pageSize
+                };
+                Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(pagination));   
                 _response.Result = _mapper.Map<List<VillaDTO>>(villas);
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);//the distenation type is between <>
