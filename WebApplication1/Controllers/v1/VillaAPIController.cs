@@ -27,15 +27,27 @@ namespace Magi.Controllers.v1
         }
 
         [HttpGet]
+        [ResponseCache(CacheProfileName ="Default30")]//will be gecached for 30 min
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         //[Authorize]
-        public async Task<ActionResult<APIResponse>> GetVillas()
+        public async Task<ActionResult<APIResponse>> GetVillas([FromQuery(Name ="filterOccupancy")]int? occupancy, [FromQuery] string? search)
         {
             try
             {
-                IEnumerable<Villa> villas = await _villaRepository.GetAll();
+                IEnumerable<Villa> villas;
+
+                if (occupancy > 0) {
+                    villas = await _villaRepository.GetAll(u => u.Occupancy == occupancy);
+                } else
+                {
+                    villas= await _villaRepository.GetAll();
+                }
+                if (!string.IsNullOrEmpty(search))
+                {
+                    villas = villas.Where(u => u.Name.ToLower().Contains(search));
+                }
                 _response.Result = _mapper.Map<List<VillaDTO>>(villas);
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);//the distenation type is between <>
@@ -48,9 +60,8 @@ namespace Magi.Controllers.v1
             return _response;
         }
 
-        [HttpGet("{id:int}", Name = "GetVilla")]//or {id:int}
-                                                // [Authorize(Roles ="admin")]
-                                                //[ProducesResponseType(200), Type = typeof(VillaDTO)]
+        [HttpGet("{id:int}", Name = "GetVilla")]
+        [ResponseCache(Duration = 30)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK)]
